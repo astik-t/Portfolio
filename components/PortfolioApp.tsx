@@ -1,31 +1,19 @@
 "use client";
 
 import { AnimatePresence, motion, useTransform } from "framer-motion";
-import dynamic from "next/dynamic";
 import { ArrowRight, BadgeCheck, Check, ChevronDown, Code2, Copy, Cpu, Download, Gamepad2, Github, Linkedin, Mail, Menu, Phone, Send, TerminalSquare, Wrench, X, Youtube } from "lucide-react";
-import { memo, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLenisScroll } from "@/hooks/useLenisScroll";
 import { useMouseParallax } from "@/hooks/useMouseParallax";
 import { CustomCursor } from "@/components/CustomCursor";
 import { SectionShell } from "@/components/SectionShell";
 import { SectionDivider } from "@/components/SectionDivider";
-import { SparklesCore } from "@/components/SparklesCore";
+import Particles from "@/components/Particles";
 import { SkillOrb } from "@/components/SkillOrb";
 import { ProjectCard } from "@/components/ProjectCard";
 import { FakeTerminal } from "@/components/FakeTerminal";
 
 const roles = ["Python Developer", "AIML Engineer", "Student Builder", "UI Experimenter"];
-
-const LazyThreeHeroScene = dynamic(() => import("@/components/ThreeHeroScene").then((mod) => mod.ThreeHeroScene), {
-  ssr: false,
-  loading: () => (
-    <div className="h-full w-full rounded-[1.5rem] border border-white/10 bg-[#0b0b0f]">
-      <div className="h-full w-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_55%)]" />
-    </div>
-  )
-});
-
-const MemoHeroScene = memo(LazyThreeHeroScene);
 
 const skillsTechnical = [
   { label: "Python", description: "Primary scripting and automation language for data and logic-heavy builds.", progress: 96 },
@@ -91,44 +79,51 @@ const timeline = [
 ];
 
 function useTypewriter(words: string[], interval = 2100) {
-  const [index, setIndex] = useState(0);
   const [typed, setTyped] = useState("");
+  const wordsRef = useRef(words);
+  wordsRef.current = words;
 
   useEffect(() => {
+    let alive = true;
+    let wordIndex = 0;
     let charIndex = 0;
     let direction: 1 | -1 = 1;
-    let rafId = 0;
-    let timeoutId = 0;
+
+    const schedule = (fn: () => void, delay: number) => {
+      window.setTimeout(() => {
+        if (alive) fn();
+      }, delay);
+    };
 
     const tick = () => {
-      const current = words[index];
+      if (!alive) return;
+      const current = wordsRef.current[wordIndex];
       setTyped(current.slice(0, charIndex));
+
       if (direction === 1) {
         if (charIndex < current.length) {
           charIndex += 1;
-          rafId = window.requestAnimationFrame(() => window.setTimeout(tick, 45));
+          schedule(tick, 45);
         } else {
           direction = -1;
-          timeoutId = window.setTimeout(() => {
-            rafId = window.requestAnimationFrame(() => window.setTimeout(tick, 25));
-          }, interval);
+          schedule(tick, interval);
         }
       } else if (charIndex > 0) {
         charIndex -= 1;
-        rafId = window.requestAnimationFrame(() => window.setTimeout(tick, 25));
+        schedule(tick, 25);
       } else {
         direction = 1;
-        setIndex((currentIndex) => (currentIndex + 1) % words.length);
+        wordIndex = (wordIndex + 1) % wordsRef.current.length;
+        schedule(tick, 25);
       }
     };
 
     tick();
 
     return () => {
-      window.cancelAnimationFrame(rafId);
-      window.clearTimeout(timeoutId);
+      alive = false;
     };
-  }, [index, interval, words]);
+  }, [interval]);
 
   return typed;
 }
@@ -246,9 +241,27 @@ function Hero() {
     <section id="home" className="relative min-h-screen overflow-hidden pt-28 lg:pt-32" {...bind}>
       <div className="absolute inset-0 bg-hero-radial" />
       <div className="absolute inset-0 soft-grid opacity-25" />
-      <div className="absolute inset-0">
-        <SparklesCore background="#050505" particleColor="#CFCFCF" particleDensity={45} speed={1.2} minSize={0.4} maxSize={1.6} className="h-full w-full" />
-      </div>
+      <motion.div
+        aria-hidden="true"
+        style={{ x: heroX, y: heroY }}
+        className="absolute inset-0 z-0 flex items-center justify-center"
+      >
+        <div style={{ width: "1080px", height: "1080px", position: "relative" }}>
+          <Particles
+            particleCount={550}
+            particleSpread={14}
+            speed={0.02}
+            particleColors={["#ffffff", "#ffffff", "#ffffff"]}
+            moveParticlesOnHover
+            particleHoverFactor={0.4}
+            alphaParticles={false}
+            particleBaseSize={100}
+            sizeRandomness={0.6}
+            cameraDistance={20}
+            disableRotation={false}
+          />
+        </div>
+      </motion.div>
       <div className="section-shell relative z-10 grid min-h-[calc(100vh-7rem)] items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
         <motion.div style={{ x, y }} className="relative z-10 space-y-8">
           <div className="space-y-4">
@@ -297,20 +310,7 @@ function Hero() {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.35 }}
-          style={{ x: heroX, y: heroY }}
-          className="relative z-10 flex justify-center"
-        >
-          <div className="relative h-[34rem] w-full max-w-[34rem] rounded-[2rem] border border-white/10 bg-white/5 p-4 shadow-glow backdrop-blur-md">
-            <div className="absolute inset-4 rounded-[1.5rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.12),transparent_50%)]" />
-            <div className="absolute inset-4 overflow-hidden rounded-[1.5rem]">
-              <MemoHeroScene className="h-full w-full" />
-            </div>
-          </div>
-        </motion.div>
+
       </div>
 
       <motion.a
@@ -617,9 +617,6 @@ function Contact({ onToggleTerminal }: { onToggleTerminal: () => void }) {
 
   return (
     <div className="relative overflow-hidden py-24">
-      <div className="absolute inset-0 opacity-50">
-        <SparklesCore background="#050505" particleColor="#BDBDBD" particleDensity={60} speed={1.2} minSize={0.4} maxSize={1.6} className="h-full w-full" />
-      </div>
       <SectionShell id="contact" eyebrow="Reach Out" title="Let's Build Something" subtitle="Available for collaborations, projects, internships, and interesting conversations." className="relative z-10">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <motion.form
@@ -753,15 +750,19 @@ export function PortfolioApp() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const openResume = () => {
+  const openResume = useCallback(() => {
     window.open("/assets/resume.pdf", "_blank", "noopener,noreferrer");
-  };
+  }, []);
+
+  const toggleTerminal = useCallback(() => {
+    setTerminalOpen((current) => !current);
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-bg">
       <CustomCursor />
       <div className="noise-overlay" />
-      <Navbar onResumeClick={openResume} onToggleTerminal={() => setTerminalOpen((current) => !current)} />
+      <Navbar onResumeClick={openResume} onToggleTerminal={toggleTerminal} />
       <main>
         <Hero />
         <SectionDivider />
@@ -775,12 +776,12 @@ export function PortfolioApp() {
         <SectionDivider />
         <Education />
         <SectionDivider />
-        <Contact onToggleTerminal={() => setTerminalOpen((current) => !current)} />
+        <Contact onToggleTerminal={toggleTerminal} />
       </main>
       <footer className="border-t border-white/10 py-8 text-center text-sm text-muted">
         <div className="section-shell">Built with Next.js, React Three Fiber, Framer Motion, Tailwind, Lenis, and a lot of late-night iteration.</div>
       </footer>
-      <FakeTerminal open={terminalOpen} onClose={() => setTerminalOpen(false)} />
+      <FakeTerminal open={terminalOpen} onClose={toggleTerminal} />
     </div>
   );
 }

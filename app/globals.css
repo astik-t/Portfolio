@@ -210,3 +210,319 @@ body {
   transform: translate(-50%, -50%);
   mix-blend-mode: screen;
 }
+
+.divider-shimmer {
+  animation: dividerSweep 3.6s ease-in-out infinite;
+}
+
+@keyframes dividerSweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+/* ============================================= */
+/*  Parallax Starfield — pure CSS                */
+/* ============================================= */
+
+.parallax-stars-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.parallax-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 200%;
+  will-change: transform;
+}
+
+/* Small stars — fastest drift, many points */
+.parallax-stars-sm {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow:
+    24px 80px #ffffff44, 180px 40px #ffffff33, 310px 120px #ffffff55,
+    450px 60px #ffffff22, 520px 200px #ffffff44, 670px 150px #ffffff33,
+    780px 90px #ffffff55, 900px 250px #ffffff22, 1020px 30px #ffffff44,
+    1150px 180px #ffffff33, 1280px 70px #ffffff44, 1400px 220px #ffffff22,
+    50px 300px #ffffff55, 200px 350px #ffffff33, 360px 400px #ffffff44,
+    490px 320px #ffffff22, 640px 380px #ffffff55, 750px 450px #ffffff33,
+    880px 340px #ffffff44, 1000px 420px #ffffff22, 1130px 360px #ffffff55,
+    1250px 480px #ffffff33, 1380px 310px #ffffff44, 100px 520px #ffffff22,
+    260px 560px #ffffff55, 410px 600px #ffffff33, 550px 540px #ffffff44,
+    700px 620px #ffffff22, 830px 580px #ffffff55, 960px 650px #ffffff33,
+    1080px 530px #ffffff44, 1200px 610px #ffffff22, 1340px 570px #ffffff55,
+    70px 700px #ffffff33, 220px 740px #ffffff44, 380px 780px #ffffff22,
+    510px 720px #ffffff55, 660px 760px #ffffff33, 800px 810px #ffffff44,
+    930px 730px #ffffff22, 1060px 790px #ffffff55, 1190px 750px #ffffff33,
+    1320px 840px #ffffff44, 40px 880px #ffffff22, 190px 920px #ffffff55,
+    340px 860px #ffffff33, 480px 940px #ffffff44, 620px 900px #ffffff22,
+    770px 960px #ffffff55, 890px 870px #ffffff33, 1010px 950px #ffffff44,
+    1150px 890px #ffffff22, 1290px 930px #ffffff55;
+  animation: starDrift 50s linear infinite;
+}
+
+/* Medium stars */
+.parallax-stars-md {
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow:
+    90px 50px #ffffff55, 300px 130px #ffffff44, 520px 80px #ffffff66,
+    700px 200px #ffffff44, 950px 60px #ffffff55, 1150px 170px #ffffff44,
+    1300px 100px #ffffff66, 160px 280px #ffffff44, 400px 340px #ffffff55,
+    600px 260px #ffffff44, 820px 380px #ffffff66, 1050px 300px #ffffff44,
+    1230px 350px #ffffff55, 60px 450px #ffffff44, 280px 500px #ffffff66,
+    470px 430px #ffffff44, 680px 520px #ffffff55, 870px 460px #ffffff44,
+    1100px 540px #ffffff66, 1280px 480px #ffffff44, 140px 620px #ffffff55,
+    350px 680px #ffffff44, 560px 640px #ffffff66, 740px 700px #ffffff44,
+    960px 660px #ffffff55, 1170px 720px #ffffff44, 80px 780px #ffffff66,
+    240px 820px #ffffff44, 430px 760px #ffffff55, 630px 840px #ffffff44,
+    850px 800px #ffffff66, 1040px 860px #ffffff44;
+  animation: starDrift 80s linear infinite;
+}
+
+/* Large stars — slowest drift, fewest points, subtle glow */
+.parallax-stars-lg {
+  width: 2.5px;
+  height: 2.5px;
+  background: transparent;
+  border-radius: 50%;
+  box-shadow:
+    150px 100px #ffffff77, 500px 180px #ffffff66, 850px 70px #ffffff88,
+    1200px 230px #ffffff66, 250px 380px #ffffff77, 650px 300px #ffffff66,
+    1000px 420px #ffffff88, 100px 550px #ffffff66, 450px 500px #ffffff77,
+    800px 580px #ffffff66, 1150px 540px #ffffff88, 300px 700px #ffffff66,
+    700px 750px #ffffff77, 1050px 680px #ffffff66, 200px 860px #ffffff88,
+    550px 820px #ffffff66, 900px 900px #ffffff77, 1250px 850px #ffffff66;
+  animation: starDrift 120s linear infinite;
+}
+
+@keyframes starDrift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+/* ============================================= */
+/*  Hero Geometry — CSS 3D orbital / wireframe   */
+/* ============================================= */
+
+.hero-geo {
+  perspective: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-geo-scene {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Central sphere */
+.hero-core {
+  position: absolute;
+  inset: 28%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255,255,255,0.28), rgba(200,200,200,0.08) 55%, rgba(0,0,0,0.15));
+  box-shadow:
+    0 0 40px rgba(255,255,255,0.12),
+    0 0 80px rgba(255,255,255,0.05),
+    inset 0 0 20px rgba(255,255,255,0.08);
+  animation: heroPulse 5s ease-in-out infinite;
+}
+
+.hero-core-bloom {
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+  filter: blur(18px);
+  animation: heroPulse 5s ease-in-out infinite;
+}
+
+/* Orbital rings */
+.hero-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.2px solid rgba(255,255,255,0.12);
+  transform-style: preserve-3d;
+}
+
+.hero-ring::before,
+.hero-ring::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  box-shadow: 0 0 10px rgba(255,255,255,0.35);
+}
+
+.hero-ring-a {
+  inset: 2%;
+  animation: heroRingA 20s linear infinite;
+}
+.hero-ring-a::before { top: 0; left: 50%; transform: translate(-50%, -50%); }
+.hero-ring-a::after  { bottom: 0; left: 50%; transform: translate(-50%, 50%); }
+
+.hero-ring-b {
+  inset: 10%;
+  border-color: rgba(255,255,255,0.08);
+  animation: heroRingB 28s linear infinite;
+}
+.hero-ring-b::before { top: 50%; right: 0; transform: translate(50%, -50%); }
+.hero-ring-b::after  { top: 50%; left: 0; transform: translate(-50%, -50%); }
+
+.hero-ring-c {
+  inset: -4%;
+  border-color: rgba(255,255,255,0.05);
+  animation: heroRingC 35s linear infinite;
+}
+.hero-ring-c::before { top: 14%; right: 14%; }
+.hero-ring-c::after  { display: none; }
+
+/* SVG wireframe overlays */
+.hero-wireframe {
+  position: absolute;
+  inset: 10%;
+  transform-style: preserve-3d;
+}
+
+.hero-wireframe-1 {
+  animation: heroWireframe1 24s linear infinite;
+}
+
+.hero-wireframe-2 {
+  animation: heroWireframe2 32s linear infinite reverse;
+  opacity: 0.6;
+}
+
+/* Keyframes */
+@keyframes heroPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.05); opacity: 0.85; }
+}
+
+@keyframes heroRingA {
+  from { transform: rotateX(72deg) rotateZ(0deg); }
+  to   { transform: rotateX(72deg) rotateZ(360deg); }
+}
+
+@keyframes heroRingB {
+  from { transform: rotateX(72deg) rotateY(60deg) rotateZ(0deg); }
+  to   { transform: rotateX(72deg) rotateY(60deg) rotateZ(360deg); }
+}
+
+@keyframes heroRingC {
+  from { transform: rotateX(72deg) rotateY(120deg) rotateZ(0deg); }
+  to   { transform: rotateX(72deg) rotateY(120deg) rotateZ(360deg); }
+}
+
+@keyframes heroWireframe1 {
+  from { transform: rotateX(65deg) rotateZ(0deg); }
+  to   { transform: rotateX(65deg) rotateZ(360deg); }
+}
+
+@keyframes heroWireframe2 {
+  from { transform: rotateX(65deg) rotateY(90deg) rotateZ(0deg); }
+  to   { transform: rotateX(65deg) rotateY(90deg) rotateZ(360deg); }
+}
+
+@layer base {
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+  }
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
+  .dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}

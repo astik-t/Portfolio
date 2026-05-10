@@ -11,7 +11,11 @@ const config: Config = {
         accent: "#BDBDBD",
         danger: "#F2F2F2",
         text: "#F5F7FA",
-        muted: "#9CA3AF"
+        muted: "#9CA3AF",
+        background: "#050505",
+        foreground: "#F5F7FA",
+        border: "rgba(255,255,255,0.1)",
+        ring: "rgba(255,255,255,0.35)"
       },
       fontFamily: {
         heading: ["var(--font-space-grotesk)", "sans-serif"],
