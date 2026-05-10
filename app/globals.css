@@ -1,0 +1,212 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.06), transparent 32%),
+    radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.03), transparent 24%),
+    linear-gradient(180deg, #050505 0%, #0b0b0f 52%, #050505 100%);
+  color: #f5f7fa;
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.22);
+  color: #f5f7fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #f2f2f2, #8a8a8a);
+  border-radius: 999px;
+}
+
+@layer utilities {
+  .glass-card {
+    @apply relative overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl;
+  }
+
+  .section-shell {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-title {
+    @apply font-heading text-3xl tracking-tight text-text sm:text-4xl lg:text-5xl;
+  }
+
+  .section-subtitle {
+    @apply mt-3 max-w-2xl text-sm leading-7 text-muted sm:text-base;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-[#f5f7fa] via-[#d4d4d4] to-[#a3a3a3] bg-clip-text text-transparent;
+  }
+
+  .gradient-text-danger {
+    @apply bg-gradient-to-r from-[#ffffff] via-[#d4d4d4] to-[#9ca3af] bg-clip-text text-transparent;
+  }
+
+  .soft-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  .scanline::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.12), transparent);
+    animation: scanline 6s linear infinite;
+    pointer-events: none;
+  }
+
+  .shimmer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.14), transparent 70%);
+    transform: translateX(-120%);
+    animation: shimmer 4.8s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .shadow-glow-strong {
+    box-shadow: 0 0 32px rgba(255, 255, 255, 0.18), 0 0 60px rgba(255, 255, 255, 0.08);
+  }
+
+  .terminal-glow {
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14), 0 0 40px rgba(255,255,255,0.06);
+  }
+}
+
+.glass-card {
+  box-shadow: 0 0 36px rgba(255, 255, 255, 0.08);
+}
+
+.glass-card::before,
+.glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.glass-card::before {
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.08), transparent 50%);
+  opacity: 0.85;
+}
+
+.glass-card::after {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.12), transparent 40%, rgba(255, 255, 255, 0.04));
+  opacity: 0.5;
+}
+
+.glass-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes shimmer {
+  0%, 70% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+}
+
+@keyframes shatter {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-18px) rotate(90deg);
+    opacity: 0.1;
+  }
+}
+
+.pulse-dot {
+  animation: dotPulse 1.8s ease-in-out infinite;
+}
+
+.shatter-particle {
+  animation: shatter 1.8s ease-in-out infinite;
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.7) 0 1px, transparent 1px), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.7) 0 1px, transparent 1px);
+  background-size: 4px 4px;
+  mix-blend-mode: screen;
+}
+
+.custom-cursor {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(245,245,245,0.9), rgba(120,120,120,0.25));
+  box-shadow: 0 0 25px rgba(255,255,255,0.35);
+  pointer-events: none;
+  z-index: 80;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+}
